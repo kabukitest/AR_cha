@@ -13,9 +13,9 @@
 </head>
 <body>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <!-- 空間固定画像を表示するエンティティ（球体に画像を貼り付け） -->
-        <a-entity id="fixed-image" geometry="primitive: sphere; radius: 5; segmentsHeight: 100; segmentsWidth: 100" 
-                  material="src: #imageSrc; side: back; transparent: true;" 
+        <!-- 空間固定360度画像を表示するエンティティ -->
+        <a-entity id="fixed-image" geometry="primitive: sphere; radius: 5; segmentsHeight: 40; segmentsWidth: 40"
+                  material="src: #imageTexture; side: double; transparent: true;" 
                   position="0 0 0" visible="false"></a-entity>
 
         <!-- マーカーリスト -->
@@ -32,7 +32,7 @@
     <script>
         const fixedImage = document.querySelector('#fixed-image');
 
-        // マーカーリストと対応する画像
+        // 画像のURLを設定（マーカーに対応する画像）
         const markers = [
             { id: 'marker-azuma', img: 'images/azuma.png' },
             { id: 'marker-hanamiti', img: 'images/hanamiti.png' },
@@ -55,13 +55,13 @@
                         const worldPosition = new THREE.Vector3();
                         markerElement.object3D.getWorldPosition(worldPosition);
 
-                        // ワールド座標に画像を固定
+                        // ワールド座標に画像（球体）を固定
                         fixedPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
                         fixedImage.setAttribute('position', fixedPosition);
                         fixedImage.setAttribute('material', 'src', marker.img);
                         fixedImage.setAttribute('visible', 'true');
 
-                        console.log(`Image for ${marker.id} positioned at:`, fixedPosition);
+                        console.log(`360° Image for ${marker.id} positioned at:`, fixedPosition);
 
                         isObjectFixed = true; // 固定フラグを有効化
                     }
