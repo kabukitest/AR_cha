@@ -53,9 +53,10 @@
                         const worldPosition = new THREE.Vector3();
                         markerElement.object3D.getWorldPosition(worldPosition);
 
-                        // 画像を球体の内側にマッピング
+                        // ワールド座標に画像を配置
                         fixedPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
                         fixedImage.setAttribute('material', `src: url(${marker.img}); side: back;`);
+                        fixedImage.setAttribute('scale', '20 20 20');  // 画像のスケール調整
                         fixedImage.setAttribute('visible', 'true');
 
                         console.log(`360° image for ${marker.id} positioned at:`, fixedPosition);
