@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR空間固定（360度複数マーカー対応）</title>
+    <title>AR空間固定（360度画像対応）</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.js"></script>
     <style>
@@ -13,10 +13,8 @@
 </head>
 <body>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <!-- 空間固定画像を表示するエンティティ -->
-        <a-entity id="fixed-image" geometry="primitive: plane; height: 2; width: 2" 
-                  material="side: double; transparent: true;" 
-                  position="0 0 0" visible="false"></a-entity>
+        <!-- 空間固定画像を表示する球体 -->
+        <a-sky id="fixed-image" material="transparent: true;" visible="false"></a-sky>
 
         <!-- マーカーリスト -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma"></a-marker>
@@ -32,13 +30,13 @@
     <script>
         const fixedImage = document.querySelector('#fixed-image');
 
-        // マーカーリストと対応する画像
+        // マーカーリストと対応する360度画像
         const markers = [
-            { id: 'marker-azuma', img: 'images/azuma.png' },
-            { id: 'marker-hanamiti', img: 'images/hanamiti.png' },
-            { id: 'marker-heiwa', img: 'images/heiwa.png' },
-            { id: 'marker-itibangai', img: 'images/itibangai.png' },
-            { id: 'marker-itibangaiiriguti_syouwa40', img: 'images/itibangaiiriguti_syouwa40.png' }
+            { id: 'marker-azuma', img: 'images/azuma-360.jpg' },
+            { id: 'marker-hanamiti', img: 'images/hanamiti-360.jpg' },
+            { id: 'marker-heiwa', img: 'images/heiwa-360.jpg' },
+            { id: 'marker-itibangai', img: 'images/itibangai-360.jpg' },
+            { id: 'marker-itibangaiiriguti_syouwa40', img: 'images/itibangaiiriguti_syouwa40-360.jpg' }
         ];
 
         // 空間固定用のフラグ
@@ -55,13 +53,12 @@
                         const worldPosition = new THREE.Vector3();
                         markerElement.object3D.getWorldPosition(worldPosition);
 
-                        // ワールド座標に画像を固定
+                        // 画像を球体の内側にマッピング
                         fixedPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
-                        fixedImage.setAttribute('position', fixedPosition);
-                        fixedImage.setAttribute('material', 'src', marker.img);
+                        fixedImage.setAttribute('material', `src: url(${marker.img}); side: back;`);
                         fixedImage.setAttribute('visible', 'true');
 
-                        console.log(`Image for ${marker.id} positioned at:`, fixedPosition);
+                        console.log(`360° image for ${marker.id} positioned at:`, fixedPosition);
 
                         isObjectFixed = true; // 固定フラグを有効化
                     }
@@ -76,16 +73,9 @@
             if (markerElement) {
                 markerElement.addEventListener('markerLost', () => {
                     if (isObjectFixed) {
-                        console.log('Marker lost, but object remains at fixed position:', fixedPosition);
+                        console.log('Marker lost, but 360° image remains fixed.');
                     }
                 });
-            }
-        });
-
-        // デバッグ用: カメラの動きを確認
-        document.querySelector('a-entity[camera]').addEventListener('componentchanged', (evt) => {
-            if (evt.detail.name === 'rotation') {
-                console.log('Camera rotation:', evt.detail.newData);
             }
         });
     </script>
