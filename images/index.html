@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebARデモ</title>
+    <!-- AR.js のライブラリを読み込み -->
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/three.js/build/ar.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- AR.js の設定 -->
+    <a-scene embedded arjs>
+        <!-- マーカーの設定 -->
+        <a-marker type="pattern" url="pattern-azuma.patt">
+            <!-- 表示する画像 -->
+            <a-image src="azuma.png" width="1" height="1"></a-image>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+</html>
