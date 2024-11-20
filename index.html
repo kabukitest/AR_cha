@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR空間固定（360度複数マーカー対応）</title>
+    <title>AR空間固定（画像回転対応）</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-gesture-detector@4.0.0/dist/aframe-gesture-detector.min.js"></script>
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden; }
         a-scene { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
@@ -14,11 +15,11 @@
 <body>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
         <!-- 空間固定画像を表示するエンティティ -->
-        <a-entity id="fixed-image" 
-                  geometry="primitive: plane; height: 2; width: 2" 
+        <a-entity id="fixed-image" geometry="primitive: plane; height: 2; width: 2" 
                   material="side: double; transparent: true;" 
-                  position="0 0 0" rotation="0 0 0" 
-                  visible="false"></a-entity>
+                  position="0 0 0" visible="false"
+                  gesture-detector
+                  rotation="0 0 0"></a-entity>
 
         <!-- マーカーリスト -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma"></a-marker>
@@ -81,6 +82,20 @@
                         console.log('Marker lost, but object remains at fixed position:', fixedPosition);
                     }
                 });
+            }
+        });
+
+        // ジェスチャーで画像を回転
+        fixedImage.addEventListener('onefingerrotate', (event) => {
+            const rotation = fixedImage.getAttribute('rotation');
+            const newRotation = rotation.y + event.detail.deltaX; // 水平方向の移動で回転
+            fixedImage.setAttribute('rotation', { x: rotation.x, y: newRotation, z: rotation.z });
+        });
+
+        // デバッグ用: カメラの動きを確認
+        document.querySelector('a-entity[camera]').addEventListener('componentchanged', (evt) => {
+            if (evt.detail.name === 'rotation') {
+                console.log('Camera rotation:', evt.detail.newData);
             }
         });
     </script>
