@@ -15,8 +15,8 @@
 </head>
 <body>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <!-- 空間固定画像のエンティティ -->
-        <a-image id="fixed-image" scale="1 1 1" visible="false"></a-image>
+        <!-- 空間固定画像を配置する親エンティティ -->
+        <a-entity id="fixed-container"></a-entity>
 
         <!-- マーカーリスト -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma"></a-marker>
@@ -30,7 +30,8 @@
 
     <script>
         let currentMarkerId = null;
-        let fixedImage = document.querySelector('#fixed-image');
+        const fixedContainer = document.querySelector('#fixed-container');
+
         const markers = [
             { id: 'marker-azuma', img: 'images/azuma.png' },
             { id: 'marker-hanamiti', img: 'images/hanamiti.png' },
@@ -45,17 +46,17 @@
                 markerElement.addEventListener('markerFound', () => {
                     if (currentMarkerId !== marker.id) {
                         currentMarkerId = marker.id;
-                        const markerWorldPosition = markerElement.object3D.getWorldPosition(new THREE.Vector3());
-                        fixedImage.setAttribute('position', markerWorldPosition);
-                        fixedImage.setAttribute('src', marker.img);
-                        fixedImage.setAttribute('visible', 'true');
-                    }
-                });
 
-                markerElement.addEventListener('markerLost', () => {
-                    if (currentMarkerId === marker.id) {
-                        // マーカーが見えなくなった後も画像は固定されたまま
-                        fixedImage.setAttribute('visible', 'true');
+                        // マーカーのワールド座標を取得
+                        const markerWorldPosition = new THREE.Vector3();
+                        markerElement.object3D.getWorldPosition(markerWorldPosition);
+
+                        // 空間固定用の画像エンティティを作成
+                        const imageEntity = document.createElement('a-image');
+                        imageEntity.setAttribute('src', marker.img);
+                        imageEntity.setAttribute('position', `${markerWorldPosition.x} ${markerWorldPosition.y} ${markerWorldPosition.z}`);
+                        imageEntity.setAttribute('scale', '1 1 1');
+                        fixedContainer.appendChild(imageEntity);
                     }
                 });
             }
