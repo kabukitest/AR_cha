@@ -1,91 +1,105 @@
-<!DOCTYPE html>
-<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebARデモ</title>
-    <!-- AR.js のライブラリを読み込み -->
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/three.js/build/ar.js"></script>
+    <title>空間固定AR</title>
     <title>AR空間固定（360度複数マーカー対応）</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; overflow: hidden; }
-        a-scene { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-    </style>
+@@ -13,47 +13,76 @@
 </head>
 <body>
-    <!-- AR.js の設定 -->
-    <a-scene embedded arjs>
-        <!-- マーカーの設定 -->
-        <a-marker type="pattern" url="pattern-azuma.patt">
-            <!-- 表示する画像 -->
-            <a-image src="azuma.png" width="1" height="1"></a-image>
-        </a-marker>
-        <a-entity camera></a-entity>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <!-- 空間固定エンティティ -->
+        <a-entity id="fixed-entity" geometry="primitive: box; height: 1; width: 1; depth: 1"
+                  material="color: blue;" position="0 0 0" visible="false"></a-entity>
         <!-- 空間固定画像を表示するエンティティ -->
         <a-entity id="fixed-image" geometry="primitive: plane; height: 2; width: 2" 
                   material="side: double; transparent: true;" 
                   position="0 0 0" visible="false"></a-entity>
+
+        <!-- マーカー -->
+        <a-marker type="pattern" url="markers/pattern-example.patt" id="marker-example"></a-marker>
         <!-- マーカーリスト -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma"></a-marker>
         <a-marker type="pattern" url="makers/pattern-hanamiti.patt" id="marker-hanamiti"></a-marker>
         <a-marker type="pattern" url="makers/pattern-heiwa.patt" id="marker-heiwa"></a-marker>
         <a-marker type="pattern" url="makers/pattern-itibangai.patt" id="marker-itibangai"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-itibangaiiriguti_syouwa40.patt" id="marker-itibangaiiriguti_syouwa40"></a-marker>
-        <!-- カメラ -->
-        <a-entity camera look-controls></a-entity>
+        <!-- 必要な他のマーカーも追加 -->
+
+        <a-entity camera></a-entity>
     </a-scene>
+
     <script>
+        const fixedEntity = document.querySelector('#fixed-entity');
+        const marker = document.querySelector('#marker-example');
+        // 空間固定用のフラグ
+        let isEntityFixed = false;
+        marker.addEventListener('markerFound', () => {
+            if (!isEntityFixed) {
+                // マーカーのワールド座標を取得
+                const worldPosition = new THREE.Vector3();
+                marker.object3D.getWorldPosition(worldPosition);
+                // 座標を固定し、エンティティを表示
+                fixedEntity.setAttribute('position', {
+                    x: worldPosition.x,
+                    y: worldPosition.y,
+                    z: worldPosition.z
+                });
         const fixedImage = document.querySelector('#fixed-image');
+        // 空間固定用のフラグと位置変数
+        let isPositionFixed = false;
+        let fixedPosition = null;
         // マーカーリストと対応する画像
         const markers = [
             { id: 'marker-azuma', img: 'images/azuma.png' },
             { id: 'marker-hanamiti', img: 'images/hanamiti.png' },
             { id: 'marker-heiwa', img: 'images/heiwa.png' },
             { id: 'marker-itibangai', img: 'images/itibangai.png' },
-            { id: 'marker-itibangaiiriguti_syouwa40', img: 'images/itibangaiiriguti_syouwa40.png' }
+            // 必要な他のマーカーもリスト化
         ];
-        // 空間固定用のフラグ
-        let isObjectFixed = false;
-        let fixedPosition = null;
-        // マーカーのイベントリスナーを設定
+        // 各マーカーのイベントリスナーを設定
         markers.forEach(marker => {
             const markerElement = document.querySelector(`#${marker.id}`);
             if (markerElement) {
                 markerElement.addEventListener('markerFound', () => {
-                    if (!isObjectFixed) {
+                    if (!isPositionFixed) {
+                        // マーカーのワールド座標を取得
                         const worldPosition = new THREE.Vector3();
                         markerElement.object3D.getWorldPosition(worldPosition);
-                        // ワールド座標に画像を固定
+                        // 座標を固定
                         fixedPosition = { x: worldPosition.x, y: worldPosition.y, z: worldPosition.z };
+
+                fixedEntity.setAttribute('visible', 'true');
+                console.log(`Entity fixed at:`, worldPosition);
+                        // 固定された位置にエンティティを配置
                         fixedImage.setAttribute('position', fixedPosition);
                         fixedImage.setAttribute('material', 'src', marker.img);
                         fixedImage.setAttribute('visible', 'true');
-                        console.log(`Image for ${marker.id} positioned at:`, fixedPosition);
-                        isObjectFixed = true; // 固定フラグを有効化
+
+                // 固定フラグを有効化
+                isEntityFixed = true;
+                        console.log(`Image fixed at:`, fixedPosition);
+                        // フラグを更新して位置を固定
+                        isPositionFixed = true;
                     }
                 });
             }
         });
-        // マーカーが見えなくなっても画像を保持
+
+        marker.addEventListener('markerLost', () => {
+            // マーカーが消えてもエンティティの表示を継続
+            console.log('Marker lost, but entity remains fixed.');
+        // マーカーが見えなくなってもエンティティを保持
         markers.forEach(marker => {
             const markerElement = document.querySelector(`#${marker.id}`);
             if (markerElement) {
                 markerElement.addEventListener('markerLost', () => {
-                    if (isObjectFixed) {
-                        console.log('Marker lost, but object remains at fixed position:', fixedPosition);
+                    if (isPositionFixed) {
+                        console.log(`Marker lost, but entity remains at fixed position:`, fixedPosition);
                     }
                 });
             }
         });
-        // デバッグ用: カメラの動きを確認
-        document.querySelector('a-entity[camera]').addEventListener('componentchanged', (evt) => {
-            if (evt.detail.name === 'rotation') {
-                console.log('Camera rotation:', evt.detail.newData);
-            }
-        });
     </script>
 </body>
-</html>
