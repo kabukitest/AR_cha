@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修正版 空間固定AR</title>
+    <title>空間固定の単一マーカーAR表示</title>
+    <!-- A-Frameライブラリ -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- AR.jsライブラリ -->
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.js"></script>
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden; }
@@ -13,35 +15,50 @@
 </head>
 <body>
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <!-- 空間固定画像のエンティティ -->
+        <a-image id="fixed-image" scale="1 1 1" visible="false"></a-image>
+
         <!-- マーカーリスト -->
-        <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma">
-            <a-plane src="images/azuma.png" height="2" width="2" position="0 0 0"></a-plane>
-        </a-marker>
-        <a-marker type="pattern" url="makers/pattern-hanamiti.patt" id="marker-hanamiti">
-            <a-plane src="images/hanamiti.png" height="2" width="2" position="0 0 0"></a-plane>
-        </a-marker>
-        <a-marker type="pattern" url="makers/pattern-heiwa.patt" id="marker-heiwa">
-            <a-plane src="images/heiwa.png" height="2" width="2" position="0 0 0"></a-plane>
-        </a-marker>
-        <a-marker type="pattern" url="makers/pattern-itibangai.patt" id="marker-itibangai">
-            <a-plane src="images/itibangai.png" height="2" width="2" position="0 0 0"></a-plane>
-        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma"></a-marker>
+        <a-marker type="pattern" url="makers/pattern-hanamiti.patt" id="marker-hanamiti"></a-marker>
+        <a-marker type="pattern" url="makers/pattern-heiwa.patt" id="marker-heiwa"></a-marker>
+        <a-marker type="pattern" url="makers/pattern-itibangai.patt" id="marker-itibangai"></a-marker>
+        <a-marker type="pattern" url="makers/pattern-kuyakusyo.patt" id="marker-kuyakusyo"></a-marker>
 
         <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-        // マーカーの読み取り状態をログで確認
-        const markers = ['marker-azuma', 'marker-hanamiti', 'marker-heiwa', 'marker-itibangai'];
+        let currentMarkerId = null;
+        let fixedImage = document.querySelector('#fixed-image');
+        const markers = [
+            { id: 'marker-azuma', img: 'images/azuma.png' },
+            { id: 'marker-hanamiti', img: 'images/hanamiti.png' },
+            { id: 'marker-heiwa', img: 'images/heiwa.png' },
+            { id: 'marker-itibangai', img: 'images/itibangai.png' },
+            { id: 'marker-kuyakusyo', img: 'images/kuyakusyo.png' }
+        ];
 
-        markers.forEach(markerId => {
-            const markerElement = document.querySelector(`#${markerId}`);
-            markerElement.addEventListener('markerFound', () => {
-                console.log(`Marker Found: ${markerId}`);
-            });
-            markerElement.addEventListener('markerLost', () => {
-                console.log(`Marker Lost: ${markerId}`);
-            });
+        markers.forEach(marker => {
+            const markerElement = document.querySelector(`#${marker.id}`);
+            if (markerElement) {
+                markerElement.addEventListener('markerFound', () => {
+                    if (currentMarkerId !== marker.id) {
+                        currentMarkerId = marker.id;
+                        const markerWorldPosition = markerElement.object3D.getWorldPosition(new THREE.Vector3());
+                        fixedImage.setAttribute('position', markerWorldPosition);
+                        fixedImage.setAttribute('src', marker.img);
+                        fixedImage.setAttribute('visible', 'true');
+                    }
+                });
+
+                markerElement.addEventListener('markerLost', () => {
+                    if (currentMarkerId === marker.id) {
+                        // マーカーが見えなくなった後も画像は固定されたまま
+                        fixedImage.setAttribute('visible', 'true');
+                    }
+                });
+            }
         });
     </script>
 </body>
