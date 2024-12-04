@@ -1,100 +1,64 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>空間固定AR表示</title>
-    <!-- A-Frameライブラリ -->
+    <title>AR.js Multi-Marker Example</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <!-- AR.jsライブラリ -->
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; overflow: hidden; }
-        a-scene { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <!-- 空間固定用のコンテナ -->
-        <a-entity id="fixed-container"></a-entity>
-
-        <!-- マーカーリスト -->
-        <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-hanamiti.patt" id="marker-hanamiti"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-heiwa.patt" id="marker-heiwa"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-itibangai.patt" id="marker-itibangai"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-itibangaiiriguti_syouwa40.patt" id="marker-itibangaiiriguti_syouwa40"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-kuyakusyo.patt" id="marker-kuyakusyo"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-maturi1.patt" id="marker-maturi1"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-maturi2.patt" id="marker-maturi2"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-maturi3.patt" id="marker-maturi3"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-maturi4.patt" id="marker-maturi4"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-maturi5.patt" id="marker-maturi5"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-nakamise.patt" id="marker-nakamise"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-nisisinzyuku.patt" id="marker-nisisinzyuku"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-nisityoukai.patt" id="marker-nisityoukai"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-sakura.patt" id="marker-sakura"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-sentorarudoori.patt" id="marker-sentorarudoori"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-sinesiteli.patt" id="marker-sinesiteli"></a-marker>
-        <a-marker type="pattern" url="makers/pattern-yasukuni.patt" id="marker-yasukuni"></a-marker>
-
+    <a-scene embedded arjs>
         <!-- カメラ -->
-        <a-entity camera></a-entity>
+        <a-camera-static></a-camera-static>
+
+        <!-- マーカーと画像 -->
+        <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma">
+            <a-image src="images/azuma.png" position="0 0.5 0" scale="1 1 1" visible="false" id="image-azuma"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-hanamiti.patt" id="marker-hanamiti">
+            <a-image src="images/hanamiti.png" position="0 0.5 0" scale="1 1 1" visible="false" id="image-hanamiti"></a-image>
+        </a-marker>
+        <!-- 以下のマーカーも同様にリストを展開 -->
+        <a-marker type="pattern" url="makers/pattern-heiwa.patt" id="marker-heiwa">
+            <a-image src="images/heiwa.png" position="0 0.5 0" scale="1 1 1" visible="false" id="image-heiwa"></a-image>
+        </a-marker>
+        <!-- 他のマーカーリストをここに追加 -->
+
+        <!-- 環境光 -->
+        <a-light type="ambient" color="#ffffff"></a-light>
     </a-scene>
 
     <script>
-        let currentMarkerId = null;
-        const fixedContainer = document.querySelector('#fixed-container');
-
+        // マーカーリストと画像マッピング
         const markers = [
-            { id: 'marker-azuma', img: 'images/azuma.png' },
-            { id: 'marker-hanamiti', img: 'images/hanamiti.png' },
-            { id: 'marker-heiwa', img: 'images/heiwa.png' },
-            { id: 'marker-itibangai', img: 'images/itibangai.png' },
-            { id: 'marker-itibangaiiriguti_syouwa40', img: 'images/itibangaiiriguti_syouwa40.png' },
-            { id: 'marker-kuyakusyo', img: 'images/kuyakusyo.png' },
-            { id: 'marker-maturi1', img: 'images/maturi1.png' },
-            { id: 'marker-maturi2', img: 'images/maturi2.png' },
-            { id: 'marker-maturi3', img: 'images/maturi3.png' },
-            { id: 'marker-maturi4', img: 'images/maturi4.png' },
-            { id: 'marker-maturi5', img: 'images/maturi5.png' },
-            { id: 'marker-nakamise', img: 'images/nakamise.png' },
-            { id: 'marker-nisisinzyuku', img: 'images/nisisinzyuku.png' },
-            { id: 'marker-nisityoukai', img: 'images/nisityoukai.png' },
-            { id: 'marker-sakura', img: 'images/sakura.png' },
-            { id: 'marker-sentorarudoori', img: 'images/sentorarudoori.png' },
-            { id: 'marker-sinesiteli', img: 'images/sinesiteli.png' },
-            { id: 'marker-yasukuni', img: 'images/yasukuni.png' }
+            { id: 'marker-azuma', imgId: 'image-azuma' },
+            { id: 'marker-hanamiti', imgId: 'image-hanamiti' },
+            { id: 'marker-heiwa', imgId: 'image-heiwa' },
+            // 他のマーカーもここに追加
         ];
 
+        // 各マーカーのイベントリスナーを追加
         markers.forEach(marker => {
-            const markerElement = document.querySelector(`#${marker.id}`);
-            markerElement.addEventListener('markerFound', () => {
-                const position = markerElement.object3D.getWorldPosition(new THREE.Vector3());
-                currentMarkerId = marker.id;
+            const markerEl = document.querySelector(`#${marker.id}`);
+            const imgEl = document.querySelector(`#${marker.imgId}`);
 
-                const imageEntity = fixedContainer.querySelector(`a-image#${marker.id}`) || document.createElement('a-image');
-                imageEntity.setAttribute('id', marker.id);
-                imageEntity.setAttribute('src', marker.img);
-                imageEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-                imageEntity.setAttribute('scale', '1 1 1');
+            // マーカーが検出されたときに画像を表示
+            markerEl.addEventListener('markerFound', () => {
+                imgEl.setAttribute('visible', true);
+            });
 
-                if (!fixedContainer.contains(imageEntity)) {
-                    fixedContainer.appendChild(imageEntity);
-                }
+            // マーカーが見えなくなったときに画像を非表示
+            markerEl.addEventListener('markerLost', () => {
+                imgEl.setAttribute('visible', false);
             });
         });
-
-        function updateVisibility() {
-            if (currentMarkerId) {
-                const imageEntity = fixedContainer.querySelector(`a-image#${currentMarkerId}`);
-                if (imageEntity) {
-                    imageEntity.setAttribute('visible', 'true');
-                }
-            }
-            requestAnimationFrame(updateVisibility);
-        }
-        updateVisibility();
     </script>
 </body>
 </html>
