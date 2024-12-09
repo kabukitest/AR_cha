@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Multi-Marker Example</title>
+    <title>AR.js Multi-Marker with Camera</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
     <style>
@@ -11,13 +11,26 @@
             margin: 0;
             overflow: hidden;
         }
+        #screenshot-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
     <a-scene embedded arjs>
         <!-- カメラ -->
         <a-camera-static></a-camera-static>
-        <!-- マーカーと画像 -->
         <!-- マーカーと画像 -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma">
         <a-image src="images/azuma.png" position="0 0.5 0" scale="6 6 6" rotation="0 0 180" visible="false" id="image-azuma"></a-image>
@@ -74,12 +87,13 @@
             <a-image src="images/yasukuni.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-yasukuni"></a-image>
         </a-marker>
 
-
-        <!-- 他のマーカーリストをここに追加 -->
-
+        <!-- 他のマーカーもここに追加 -->
         <!-- 環境光 -->
         <a-light type="ambient" color="#ffffff"></a-light>
     </a-scene>
+
+    <!-- スクリーンショットボタン -->
+    <button id="screenshot-button">写真を撮る</button>
 
     <script>
         // マーカーリストと画像マッピング
@@ -102,6 +116,7 @@
             { id: 'marker-sentorarudoori', imgId: 'image-sentorarudoori' },
             { id: 'marker-sinesiteli', imgId: 'image-sinesiteli' },
             { id: 'marker-yasukuni', imgId: 'image-yasukuni' }
+
             // 他のマーカーもここに追加
         ];
 
@@ -119,6 +134,27 @@
             markerEl.addEventListener('markerLost', () => {
                 imgEl.setAttribute('visible', false);
             });
+        });
+
+        // スクリーンショット機能
+        const screenshotButton = document.getElementById('screenshot-button');
+        const scene = document.querySelector('a-scene');
+
+        screenshotButton.addEventListener('click', () => {
+            // A-FrameのスクリーンショットAPIを使用
+            scene.components.screenshot.capture('perspective');
+
+            // スクリーンショットを取得
+            const screenshot = scene.components.screenshot.getCanvas('perspective');
+
+            if (screenshot) {
+                const link = document.createElement('a');
+                link.href = screenshot.toDataURL('image/png');
+                link.download = 'screenshot.png';
+                link.click();
+            } else {
+                alert('スクリーンショットを取得できませんでした。');
+            }
         });
     </script>
 </body>
