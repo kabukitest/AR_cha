@@ -25,36 +25,113 @@
     </style>
 </head>
 <body>
-    <div id="description">Azuma's description goes here</div>
+    <div id="description"></div>
 
     <a-scene embedded arjs>
         <a-camera-static></a-camera-static>
 
-        <!-- Azuma マーカーと画像 -->
+        <!-- マーカーと画像 -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma">
-            <a-image src="images/azuma.png" position="0 0.5 0" scale="6 6 6" rotation="0 0 180" visible="false" id="image-azuma"></a-image>
+        <a-image src="images/azuma.png" position="0 0.5 0" scale="6 6 6" rotation="0 0 180" visible="false" id="image-azuma"></a-image>
         </a-marker>
-
+        <a-marker type="pattern" url="makers/pattern-hanamiti.patt" id="marker-hanamiti">
+            <a-image src="images/hanamiti.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-hanamiti"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-heiwa.patt" id="marker-heiwa">
+            <a-image src="images/heiwa.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-heiwa"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-itibangai.patt" id="marker-itibangai">
+            <a-image src="images/itibangai.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-itibangai"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-itibangaiiriguti_syouwa40.patt" id="marker-itibangaiiriguti_syouwa40">
+            <a-image src="images/itibangaiiriguti_syouwa40.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-itibangaiiriguti_syouwa40"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-kuyakusyo.patt" id="marker-kuyakusyo">
+            <a-image src="images/kuyakusyo.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-kuyakusyo"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-maturi1.patt" id="marker-maturi1">
+            <a-image src="images/maturi1.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-maturi1"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-maturi2.patt" id="marker-maturi2">
+            <a-image src="images/maturi2.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-maturi2"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-maturi3.patt" id="marker-maturi3">
+            <a-image src="images/maturi3.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-maturi3"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-maturi4.patt" id="marker-maturi4">
+            <a-image src="images/maturi4.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-maturi4"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-maturi5.patt" id="marker-maturi5">
+            <a-image src="images/maturi5.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-maturi5"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-nakamise.patt" id="marker-nakamise">
+            <a-image src="images/nakamise.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-nakamise"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-nisisinzyuku.patt" id="marker-nisisinzyuku">
+            <a-image src="images/nisisinzyuku.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-nisisinzyuku"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-nisityoukai.patt" id="marker-nisityoukai">
+            <a-image src="images/nisityoukai.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-nisityoukai"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-sakura.patt" id="marker-sakura">
+            <a-image src="images/sakura.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-sakura"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-sentorarudoori.patt" id="marker-sentorarudoori">
+            <a-image src="images/sentorarudoori.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-sentorarudoori"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-sinesiteli.patt" id="marker-sinesiteli">
+            <a-image src="images/sinesiteli.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-sinesiteli"></a-image>
+        </a-marker>
+        <a-marker type="pattern" url="makers/pattern-yasukuni.patt" id="marker-yasukuni">
+            <a-image src="images/yasukuni.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-yasukuni"></a-image>
+        </a-marker>
+        <!-- 他のマーカーも追加 -->
         <!-- 環境光 -->
         <a-light type="ambient" color="#ffffff"></a-light>
     </a-scene>
 
     <script>
-        const markerAzuma = document.querySelector("#marker-azuma");
-        const imgAzuma = document.querySelector("#image-azuma");
-        const description = document.querySelector("#description");
+        // マーカーと説明文のマッピング
+        const markers = [
+            { id: 'marker-azuma', imgId: 'image-azuma' },
+            { id: 'marker-hanamiti', imgId: 'image-hanamiti' },
+            { id: 'marker-heiwa', imgId: 'image-heiwa' },
+            { id: 'marker-itibangai', imgId: 'image-itibangai' },
+            { id: 'marker-itibangaiiriguti_syouwa40', imgId: 'image-itibangaiiriguti_syouwa40' },
+            { id: 'marker-kuyakusyo', imgId: 'image-kuyakusyo' },
+            { id: 'marker-maturi1', imgId: 'image-maturi1' },
+            { id: 'marker-maturi2', imgId: 'image-maturi2' },
+            { id: 'marker-maturi3', imgId: 'image-maturi3' },
+            { id: 'marker-maturi4', imgId: 'image-maturi4' },
+            { id: 'marker-maturi5', imgId: 'image-maturi5' },
+            { id: 'marker-nakamise', imgId: 'image-nakamise' },
+            { id: 'marker-nisisinzyuku', imgId: 'image-nisisinzyuku' },
+            { id: 'marker-nisityoukai', imgId: 'image-nisityoukai' },
+            { id: 'marker-sakura', imgId: 'image-sakura' },
+            { id: 'marker-sentorarudoori', imgId: 'image-sentorarudoori' },
+            { id: 'marker-sinesiteli', imgId: 'image-sinesiteli' },
+            { id: 'marker-yasukuni', imgId: 'image-yasukuni' }
+            // 他のマーカーもここに追加
+        ];
 
-        // マーカーが検出されたとき
-        markerAzuma.addEventListener('markerFound', () => {
-            imgAzuma.setAttribute('visible', true);
-            description.textContent = "昭和50年頃まで住民の生活の場だった東通りは、西武新宿駅ビル開業を機に商業化が進行。履物店が多かったが、住民がビルオーナーや飲食店経営者となり発展。華やかさは控えめで老舗が多く、常連客に愛される。電柱撤去や地中化で整備され、外国人バー問題も解消され落ち着いた雰囲気を保つ。"; // 説明文
-            description.style.display = "block"; // 表示
-        });
+        const descriptionDiv = document.querySelector("#description");
 
-        // マーカーが見えなくなったとき
-        markerAzuma.addEventListener('markerLost', () => {
-            imgAzuma.setAttribute('visible', false);
-            description.style.display = "none"; // 非表示
+        markerDescriptions.forEach(marker => {
+            const markerEl = document.querySelector(`#${marker.markerId}`);
+            const imgEl = document.querySelector(`#${marker.imgId}`);
+
+            // マーカーが検出されたとき
+            markerEl.addEventListener('markerFound', () => {
+                imgEl.setAttribute('visible', true);
+                descriptionDiv.textContent = marker.description;
+                descriptionDiv.style.display = "block"; // 表示
+            });
+
+            // マーカーが見えなくなったとき
+            markerEl.addEventListener('markerLost', () => {
+                imgEl.setAttribute('visible', false);
+                descriptionDiv.style.display = "none"; // 非表示
+            });
         });
     </script>
 </body>
