@@ -93,24 +93,24 @@
     <script>
         // マーカーごとの説明文をマッピング
     const markerDescriptions = [
-        { markerId: 'marker-azuma', imgId: 'image-azuma', description: 'Azumaの説明文です。' },
-        { markerId: 'marker-hanamiti', imgId: 'image-hanamiti', description: 'Hanamitiの説明文です。' },
-        { markerId: 'marker-heiwa', imgId: 'image-heiwa', description: 'Heiwaの説明文です。' },
-        { markerId: 'marker-itibangai', imgId: 'image-itibangai', description: 'Itibangaiの説明文です。' },
-        { markerId: 'marker-itibangaiiriguti_syouwa40', imgId: 'image-itibangaiiriguti_syouwa40', description: 'Itibangaiiriguti Syowa40の説明文です。' },
-        { markerId: 'marker-kuyakusyo', imgId: 'image-kuyakusyo', description: 'Kuyakusyoの説明文です。' },
-        { markerId: 'marker-maturi1', imgId: 'image-maturi1', description: 'Maturi1の説明文です。' },
-        { markerId: 'marker-maturi2', imgId: 'image-maturi2', description: 'Maturi2の説明文です。' },
-        { markerId: 'marker-maturi3', imgId: 'image-maturi3', description: 'Maturi3の説明文です。' },
-        { markerId: 'marker-maturi4', imgId: 'image-maturi4', description: 'Maturi4の説明文です。' },
-        { markerId: 'marker-maturi5', imgId: 'image-maturi5', description: 'Maturi5の説明文です。' },
-        { markerId: 'marker-nakamise', imgId: 'image-nakamise', description: 'Nakamiseの説明文です。' },
-        { markerId: 'marker-nisisinzyuku', imgId: 'image-nisisinzyuku', description: 'Nisisinzyukuの説明文です。' },
-        { markerId: 'marker-nisityoukai', imgId: 'image-nisityoukai', description: 'Nisityoukaiの説明文です。' },
-        { markerId: 'marker-sakura', imgId: 'image-sakura', description: 'Sakuraの説明文です。' },
-        { markerId: 'marker-sentorarudoori', imgId: 'image-sentorarudoori', description: 'Sentorarudooriの説明文です。' },
-        { markerId: 'marker-sinesiteli', imgId: 'image-sinesiteli', description: 'Sinesiteliの説明文です。' },
-        { markerId: 'marker-yasukuni', imgId: 'image-yasukuni', description: 'Yasukuniの説明文です。' }
+        { markerId: 'marker-azuma', imgId: 'image-azuma', description: '昭和50年頃まで住民の生活の場だった東通りは、西武新宿駅ビル開業を機に商業化が進行。履物店が多かったが、住民がビルオーナーや飲食店経営者となり発展。華やかさは控えめで老舗が多く、常連客に愛される。電柱撤去や地中化で整備され、外国人バー問題も解消され落ち着いた雰囲気を保つ。' },
+        { markerId: 'marker-hanamiti', imgId: 'image-hanamiti', description: '花道通りは歌舞伎劇場に由来し、かつて川を埋め立てて作られた。平成19年に歩道拡幅工事が完成し、歩行者の安全が向上。明るいタイル舗装で清潔感が増し、環境整備により集客力も向上した。かつては暗いイメージや混雑が敬遠されたが、東京都健康プラザ完成を機に女性客も増え、歌舞伎町の象徴的存在に変化した。' },
+        { markerId: 'marker-heiwa', imgId: 'image-heiwa', description: '平和通りの写真です。' },
+        { markerId: 'marker-itibangai', imgId: 'image-itibangai', description: '歌舞伎町一番街のアーチは象徴的存在で、現在のものは1969年に架け替えられた2代目。戦後の区割りを保ち、以前は履物店が中心だったが、地球座やスケートリンクの誕生で映画客や若者が集まり、繁華街へと変貌した。靴店のスケート靴レンタルや郊外ツアーが人気を博し、地域の活気を支えた。' },
+        { markerId: 'marker-itibangaiiriguti_syouwa40', imgId: 'image-itibangaiiriguti_syouwa40', description: '昭和４０年の一番街の写真です' },
+        { markerId: 'marker-kuyakusyo', imgId: 'image-kuyakusyo', description: '区役所通りの写真です' },
+        { markerId: 'marker-maturi1', imgId: 'image-maturi1', description: '祭りの写真です' },
+        { markerId: 'marker-maturi2', imgId: 'image-maturi2', description: '祭りの写真です' },
+        { markerId: 'marker-maturi3', imgId: 'image-maturi3', description: '祭りの写真です' },
+        { markerId: 'marker-maturi4', imgId: 'image-maturi4', description: '祭りの写真です' },
+        { markerId: 'marker-maturi5', imgId: 'image-maturi5', description: '祭りの写真です' },
+        { markerId: 'marker-nakamise', imgId: 'image-nakamise', description: '仲見世通りはセントラルロードとさくら通りを結ぶ横町的な通りで、寿司屋や小料理屋が多く、人情味あふれる場所だった。経済発展とともに風俗店が増加し一般客が減少。しかし、振興組合や行政の浄化活動により風俗店が激減し、落ち着いた雰囲気を取り戻している。現在も「五十番」や「新宿碁会所」などの老舗が営業を続けている。' },
+        { markerId: 'marker-nisisinzyuku', imgId: 'image-nisisinzyuku', description: '西武新宿駅前通りは、歌舞伎町の西玄関口として発展。戦後の区画整理や西武新宿駅の開業を契機に繁華街化が進み、深夜営業店が増加。1970年代の新宿サブナードや西武新宿ぺぺの開業でさらに活況を呈し、街路灯やカラー舗装で美化が進行。現在も駅前商店街として賑わいを見せている。' },
+        { markerId: 'marker-nisityoukai', imgId: 'image-nisityoukai', description: 'ウエストロード（旧銀座通り）は、西武新宿駅開業に伴い発展した歌舞伎町の表玄関で、流行の店が集まり賑わった。経営者同士が協力し、環境浄化活動にも尽力。地域連携の精神を受け継ぎ発展に努めている。' },
+        { markerId: 'marker-sakura', imgId: 'image-sakura', description: 'さくら通りは、戦後住民が植えた八重桜が象徴的だったが、街の発展で伐採された。かつては商店街として活気があり、顔なじみの常連が多かった。1970年代以降、街路灯整備やアーチ改修で近代化。一時期風俗店の影響があったが、現在は健全な地域として住民に大切にされ、歌舞伎町の明るい発展を支える通りとなっている。' },
+        { markerId: 'marker-sentorarudoori', imgId: 'image-sentorarudoori', description: 'セントラル通りの写真です。' },
+        { markerId: 'marker-sinesiteli', imgId: 'image-sinesiteli', description: 'シネシティ広場の写真です' },
+        { markerId: 'marker-yasukuni', imgId: 'image-yasukuni', description: '靖国通りの写真です' }
     ];
 
         const descriptionDiv = document.querySelector("#description");
