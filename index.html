@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Multi-Marker Example</title>
+    <title>AR.js Multi-Marker with Descriptions</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
     <style>
@@ -12,15 +12,17 @@
             overflow: hidden;
         }
         #description {
-            position: absolute;
+            position: fixed;
             top: 10px;
             left: 10px;
-            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
             font-family: Arial, sans-serif;
-            display: none; /* 最初は非表示 */
+            font-size: 14px;
+            border-radius: 5px;
+            display: none;
+            z-index: 100;
         }
     </style>
 </head>
@@ -28,8 +30,8 @@
     <div id="description"></div>
 
     <a-scene embedded arjs>
+        <!-- カメラ -->
         <a-camera-static></a-camera-static>
-
         <!-- マーカーと画像 -->
         <a-marker type="pattern" url="makers/pattern-azuma.patt" id="marker-azuma">
         <a-image src="images/azuma.png" position="0 0.5 0" scale="6 6 6" rotation="0 0 180" visible="false" id="image-azuma"></a-image>
@@ -85,34 +87,31 @@
         <a-marker type="pattern" url="makers/pattern-yasukuni.patt" id="marker-yasukuni">
             <a-image src="images/yasukuni.png" position="0 0.5 0" scale="3 3 3" rotation="0 0 180" visible="false" id="image-yasukuni"></a-image>
         </a-marker>
-        <!-- 他のマーカーも追加 -->
-        <!-- 環境光 -->
-        <a-light type="ambient" color="#ffffff"></a-light>
+        <!-- 他のマーカーを追加 -->
     </a-scene>
 
     <script>
-        // マーカーと説明文のマッピング
-        const markers = [
-            { id: 'marker-azuma', imgId: 'image-azuma' },
-            { id: 'marker-hanamiti', imgId: 'image-hanamiti' },
-            { id: 'marker-heiwa', imgId: 'image-heiwa' },
-            { id: 'marker-itibangai', imgId: 'image-itibangai' },
-            { id: 'marker-itibangaiiriguti_syouwa40', imgId: 'image-itibangaiiriguti_syouwa40' },
-            { id: 'marker-kuyakusyo', imgId: 'image-kuyakusyo' },
-            { id: 'marker-maturi1', imgId: 'image-maturi1' },
-            { id: 'marker-maturi2', imgId: 'image-maturi2' },
-            { id: 'marker-maturi3', imgId: 'image-maturi3' },
-            { id: 'marker-maturi4', imgId: 'image-maturi4' },
-            { id: 'marker-maturi5', imgId: 'image-maturi5' },
-            { id: 'marker-nakamise', imgId: 'image-nakamise' },
-            { id: 'marker-nisisinzyuku', imgId: 'image-nisisinzyuku' },
-            { id: 'marker-nisityoukai', imgId: 'image-nisityoukai' },
-            { id: 'marker-sakura', imgId: 'image-sakura' },
-            { id: 'marker-sentorarudoori', imgId: 'image-sentorarudoori' },
-            { id: 'marker-sinesiteli', imgId: 'image-sinesiteli' },
-            { id: 'marker-yasukuni', imgId: 'image-yasukuni' }
-            // 他のマーカーもここに追加
-        ];
+        // マーカーごとの説明文をマッピング
+    const markerDescriptions = [
+        { markerId: 'marker-azuma', imgId: 'image-azuma', description: 'Azumaの説明文です。' },
+        { markerId: 'marker-hanamiti', imgId: 'image-hanamiti', description: 'Hanamitiの説明文です。' },
+        { markerId: 'marker-heiwa', imgId: 'image-heiwa', description: 'Heiwaの説明文です。' },
+        { markerId: 'marker-itibangai', imgId: 'image-itibangai', description: 'Itibangaiの説明文です。' },
+        { markerId: 'marker-itibangaiiriguti_syouwa40', imgId: 'image-itibangaiiriguti_syouwa40', description: 'Itibangaiiriguti Syowa40の説明文です。' },
+        { markerId: 'marker-kuyakusyo', imgId: 'image-kuyakusyo', description: 'Kuyakusyoの説明文です。' },
+        { markerId: 'marker-maturi1', imgId: 'image-maturi1', description: 'Maturi1の説明文です。' },
+        { markerId: 'marker-maturi2', imgId: 'image-maturi2', description: 'Maturi2の説明文です。' },
+        { markerId: 'marker-maturi3', imgId: 'image-maturi3', description: 'Maturi3の説明文です。' },
+        { markerId: 'marker-maturi4', imgId: 'image-maturi4', description: 'Maturi4の説明文です。' },
+        { markerId: 'marker-maturi5', imgId: 'image-maturi5', description: 'Maturi5の説明文です。' },
+        { markerId: 'marker-nakamise', imgId: 'image-nakamise', description: 'Nakamiseの説明文です。' },
+        { markerId: 'marker-nisisinzyuku', imgId: 'image-nisisinzyuku', description: 'Nisisinzyukuの説明文です。' },
+        { markerId: 'marker-nisityoukai', imgId: 'image-nisityoukai', description: 'Nisityoukaiの説明文です。' },
+        { markerId: 'marker-sakura', imgId: 'image-sakura', description: 'Sakuraの説明文です。' },
+        { markerId: 'marker-sentorarudoori', imgId: 'image-sentorarudoori', description: 'Sentorarudooriの説明文です。' },
+        { markerId: 'marker-sinesiteli', imgId: 'image-sinesiteli', description: 'Sinesiteliの説明文です。' },
+        { markerId: 'marker-yasukuni', imgId: 'image-yasukuni', description: 'Yasukuniの説明文です。' }
+    ];
 
         const descriptionDiv = document.querySelector("#description");
 
@@ -123,7 +122,7 @@
             // マーカーが検出されたとき
             markerEl.addEventListener('markerFound', () => {
                 imgEl.setAttribute('visible', true);
-                descriptionDiv.textContent = marker.description;
+                descriptionDiv.textContent = marker.description; // マーカーに応じた説明文を設定
                 descriptionDiv.style.display = "block"; // 表示
             });
 
